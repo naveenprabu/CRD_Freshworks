@@ -1,0 +1,37 @@
+import CRD_Freshworks as c
+
+c.create("n",20)
+c.create("p",21,30)
+#fix timeout as 30 in the last parameter
+
+c.read("n")
+#'n:20'  <- Output
+
+c.read("p")
+#'p:21'  <- Output
+
+#Here we fix the timeout as 30seconds, so After 30seconds P should be expired.we didn't do read and delete operation after expired.
+c.read("p")
+#error, time-to-live key  p has expired  <- Output
+
+c.create("n",22)
+#Key is Already Exists   <- Output
+
+# In the above create, "n" key is already exist,so we unable to create it again.
+
+c.delete("n")
+#Key Deleted Successfully   <- Output
+
+#In the above delete command, we deleted the key "n".so we unable to read the value using key "n".
+
+c.read("n")
+#error,This Key not found. Please enter the valid key  <- Output
+
+c.create("naveenprabu",50)
+c.read("naveenprabu")
+#'naveenprabu:20'     <- Output
+
+
+#By Executing Line-by-Line command , (<- Output) justifies the process of Create,Read,Delete(CRD).
+
+

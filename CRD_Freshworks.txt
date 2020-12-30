@@ -1,0 +1,59 @@
+# CRD Operation
+import time
+import threading
+d={}
+
+#Create
+def create(key,value,t=0):
+    if key in d:
+        print("Key is Already Exists")
+    else:
+        if(key.isalpha()):
+            if(len(d)<(1024*1024*1024) and value<=(16*1024*1024)):
+               if t==0:
+                   l=[value,t]
+               else:
+                   l=[value,time.time()+t]
+               if len(key)<=32:
+                   d[key]=l
+            else:
+                print("Memory Limit Exceeded")
+        else:
+            print("Error Invalid Key,Key must be in Alphabets")
+#Read
+def read(key):
+    if key not in d:
+        print("error,This Key not found. Please enter the valid key")
+    else:
+        a=d[key]
+        if a[1]!=0:
+            if time.time()<a[1]:
+                detail = str(key)+":"+str(a[0])
+                return detail
+            else:
+                print("error, time-to-live key ",key,"has expired")
+        else:
+            detail=str(key)+":"+str(a[0])
+            return detail
+#Delete
+def delete(key):
+    if key not in d:
+        print("error,This Key not found. Please enter the valid key")
+    else:
+        a=d[key]
+        if a[1]!=0:
+            if time.time()<a[1]:
+                del d[key]
+                print("Key Deleted Successfully")
+            else:
+                print("error, time-to-live key ",key,"has expired")
+        else:
+            del d[key]
+            print("Key Deleted Successfully")
+
+
+#thread Methods
+t1=threading.Thread(target=(create or read or delete),args=("naveen",1))
+t2=threading.Thread(target=(create or read or delete),args=("prabu",2))
+t1.start()
+t2.start()
